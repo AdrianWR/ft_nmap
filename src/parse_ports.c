@@ -9,7 +9,7 @@
 static int add_port(t_port ports[], t_port port) {
   int i;
 
-  for (i = 0; i < MAX_PORTS; i++) {
+  for (i = 0; i < PORT_MAX; i++) {
     if (ports[i] == 0 || ports[i] == port) {
       ports[i] = port;
       return (0);
@@ -54,6 +54,9 @@ int parse_ports(t_port ports[], char *arg) {
   char *token;
   char *saveptr;
   int err;
+
+  // Clean default values
+  memset(ports, 0, sizeof(t_port) * PORT_MAX);
 
   err = 0;
   token = strtok_r(arg, ",", &saveptr);

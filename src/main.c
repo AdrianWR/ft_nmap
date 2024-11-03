@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
   memset(&nmap, 0, sizeof(t_nmap));
   nmap.threads = 1;
   nmap.scan = ALL;
-  for (int i = 0; i < MAX_PORTS; i++)
+  for (int i = PORT_MIN; i < DEFAULT_PORT_MAX; i++)
     nmap.ports[i] = i + 1;
 
   ret = parse_options(&nmap, &cmd_args);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   printf("Threads: %d\n", nmap.threads);
   printf("Scan: %d\n", nmap.scan);
   printf("Ports: ");
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < PORT_MAX; i++) {
     if (nmap.ports[i] == 0)
       break;
     printf("%d ", nmap.ports[i]);

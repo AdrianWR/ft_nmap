@@ -20,8 +20,8 @@
 
 #define PORT_MIN 0
 #define PORT_MAX 65535
+#define DEFAULT_PORT_MAX 1024
 
-#define MAX_PORTS 1024
 #define MAX_HOSTS 1024
 #define MAX_THREADS 250
 
@@ -53,7 +53,7 @@ typedef struct arguments {
 
 typedef struct s_nmap {
   t_ip hosts[MAX_HOSTS];
-  t_port ports[MAX_PORTS];
+  t_port ports[PORT_MAX];
   unsigned short threads;
   t_scan scan;
 } t_nmap;
