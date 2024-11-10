@@ -6,19 +6,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int add_port(t_port ports[], t_port port) {
-  int i;
+static int add_port(t_port port, t_port ports[], size_t *ports_len) {
+  static int i;
 
-  for (i = 0; i < PORT_MAX; i++) {
-    if (ports[i] == 0 || ports[i] == port) {
-      ports[i] = port;
-      return (0);
-    }
+  // TODO: Check if port already exists
+  // Set data type to handle this
+  if (i < PORT_MAX) {
+    ports[i] = port;
+    i++;
+    (*ports_len)++;
+    return (0);
   }
+
   return (ERR_MAX_PORTS);
 }
 
-static int parse_port_range(t_port ports[], char *token) {
+static int parse_port_range(char *token, t_port ports[], size_t *ports_len) {
   int err;
   t_port port;
   t_port range[2];
@@ -33,24 +36,24 @@ static int parse_port_range(t_port ports[], char *token) {
   }
 
   for (port = range[0]; port <= range[1]; port++) {
-    if ((err = add_port(ports, port))) {
+    if ((err = add_port(port, ports, ports_len))) {
       break;
     }
   }
   return (err);
 }
 
-static int parse_single_port(t_port ports[], char *token) {
+static int parse_single_port(char *token, t_port ports[], size_t *ports_len) {
   t_port port;
 
   port = atoi(token);
   if (port < PORT_MIN || port > PORT_MAX) {
     return (ERR_PORT_RANGE);
   }
-  return (add_port(ports, port));
+  return (add_port(port, ports, ports_len));
 }
 
-int parse_ports(t_port ports[], char *arg) {
+int parse_ports(char *arg, t_port ports[], size_t *ports_len) {
   char *token;
   char *saveptr;
   int err;
@@ -63,9 +66,9 @@ int parse_ports(t_port ports[], char *arg) {
 
   while (token) {
     if (matches_regex(PORT_RANGE_REGEX, token)) {
-      err = parse_port_range(ports, token);
+      err = parse_port_range(token, ports, ports_len);
     } else if (matches_regex(PORT_REGEX, token)) {
-      err = parse_single_port(ports, token);
+      err = parse_single_port(token, ports, ports_len);
     } else {
       err = ERR_PARSE_OPT;
     }

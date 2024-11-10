@@ -78,14 +78,11 @@ int main(int argc, char *argv[]) {
     return (EXIT_FAILURE);
   }
 
-  printf("Threads: %d\n", nmap.threads);
-  printf("Scan: %d\n", nmap.scan);
-  printf("Ports: ");
-  for (int i = 0; i < PORT_MAX; i++) {
-    if (nmap.ports[i] == 0)
-      break;
-    printf("%d ", nmap.ports[i]);
+  ret = run_scans(nmap);
+  if (ret != 0) {
+    print_err(ret);
+    return (EXIT_FAILURE);
   }
 
-  return (ret);
+  return (EXIT_SUCCESS);
 }

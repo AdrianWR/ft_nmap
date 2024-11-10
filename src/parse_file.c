@@ -14,7 +14,7 @@
  * return an error.
  */
 
-int parse_address_file(t_ip hosts[], char *arg) {
+int parse_address_file(t_ip hosts[], size_t *hosts_len, char *arg) {
   int fd;
   char *line;
   int ret;
@@ -34,6 +34,7 @@ int parse_address_file(t_ip hosts[], char *arg) {
       return (ret);
     }
     i++;
+    (*hosts_len)++;
     free(line);
   }
 

@@ -27,7 +27,7 @@
 
 #define SCANS_LEN 6
 
-typedef in_addr_t t_ip;
+typedef struct in_addr t_ip;
 typedef in_port_t t_port;
 
 typedef enum e_scan {
@@ -56,15 +56,19 @@ typedef struct s_nmap {
   t_port ports[PORT_MAX];
   unsigned short threads;
   t_scan scan;
+
+  size_t hosts_len;
+  size_t ports_len;
 } t_nmap;
 
 int parse_options(t_nmap *nmap, t_arguments *args);
-int parse_ports(t_port ports[], char *arg);
+int parse_ports(char *arg, t_port ports[], size_t *ports_len);
 int parse_threads(unsigned short *threads, char *arg);
 int parse_address(t_ip hosts[], char *arg);
-int parse_address_file(t_ip hosts[], char *arg);
+int parse_address_file(t_ip hosts[], size_t *hosts_len, char *arg);
 int parse_scan(t_scan *scan, char *arg);
 
 bool matches_regex(char *pattern, char *string);
+int run_scans(t_nmap nmap);
 
 #endif

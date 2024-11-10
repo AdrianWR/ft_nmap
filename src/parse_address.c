@@ -19,6 +19,7 @@ int address_lookup(struct sockaddr_in *addr_in, const char *host) {
   hints.ai_flags = AI_CANONNAME;
 
   if ((err = getaddrinfo(host, NULL, &hints, &res))) {
+    fprintf(stderr, "Network error: %s\n", gai_strerror(err));
     return (err);
   }
 
@@ -34,13 +35,14 @@ int address_lookup(struct sockaddr_in *addr_in, const char *host) {
 }
 
 static int add_host(t_ip hosts[], t_ip host) {
-  int i;
+  static int i;
 
-  for (i = 0; i < MAX_HOSTS; i++) {
-    if (hosts[i] == 0 || hosts[i] == host) {
-      hosts[i] = host;
-      return (0);
-    }
+  // TODO: Check if port already exists
+  // Set data type to handle this
+  if (i < MAX_HOSTS) {
+    hosts[i] = host;
+    i++;
+    return (0);
   }
 
   return (ERR_MAX_HOSTS);
@@ -59,7 +61,7 @@ int parse_address(t_ip hosts[], char *arg) {
     return (ERR_ADDRESS_LOOKUP);
   }
 
-  err = add_host(hosts, addr_in.sin_addr.s_addr);
+  err = add_host(hosts, addr_in.sin_addr);
 
   return (err);
 }
