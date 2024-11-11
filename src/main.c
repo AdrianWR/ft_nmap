@@ -80,7 +80,6 @@ int main(int argc, char *argv[]) {
 
   ret = run_scans(nmap);
   if (ret != 0) {
-    print_err(ret);
     return (EXIT_FAILURE);
   }
 

@@ -27,6 +27,10 @@
 
 #define SCANS_LEN 6
 
+#define PACKET_SIZE 4096
+#define DNS_SERVER "8.8.8.8"
+#define DNS_PORT 53
+
 typedef struct in_addr t_ip;
 typedef in_port_t t_port;
 
@@ -59,6 +63,8 @@ typedef struct s_nmap {
 
   size_t hosts_len;
   size_t ports_len;
+
+  char local_ip[INET_ADDRSTRLEN];
 } t_nmap;
 
 int parse_options(t_nmap *nmap, t_arguments *args);
@@ -70,5 +76,9 @@ int parse_scan(t_scan *scan, char *arg);
 
 bool matches_regex(char *pattern, char *string);
 int run_scans(t_nmap nmap);
+int get_local_ip(char *ip);
+int send_packet(struct in_addr src, struct in_addr dest, t_port port);
+const char *setup_packet(struct in_addr src, struct in_addr dest,
+                         in_port_t port);
 
 #endif
