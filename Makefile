@@ -11,13 +11,12 @@ LDFLAGS =
 SRC_DIR = src
 OBJ_DIR = build
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRC = $(wildcard $(SRC_DIR)/*.c) 	\
+	  $(wildcard $(SRC_DIR)/**/*.c)
+OBJ = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRC))
 INCLUDE = $(wildcard include/*.h)
 
-vpath %.c $(SRC_DIR) $(SRC_DIR)/parse
-vpath %.h $(INCLUDE)
-
+vpath %.c $(SRC_DIR)
 
 all: $(NAME)
 
@@ -25,7 +24,7 @@ $(NAME): $(OBJ)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: %.c $(INCLUDE)
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $@D
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
